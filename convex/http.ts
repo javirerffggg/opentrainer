@@ -160,7 +160,7 @@ http.route({
       });
     }
 
-    const user = await ctx.runQuery(internal.http.getUserByShareToken, { token });
+    const user = await ctx.runQuery(internal.users.getUserByShareToken, { token });
 
     if (!user) {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
@@ -170,7 +170,7 @@ http.route({
     }
 
     // Call a query to gather all the user's data
-    const exportData = await ctx.runQuery(internal.http.getExportDataForUser, { userId: user._id });
+    const exportData = await ctx.runQuery(internal.users.getExportDataForUser, { userId: user._id });
 
     return new Response(JSON.stringify(exportData), {
       status: 200,
