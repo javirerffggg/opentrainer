@@ -61,12 +61,6 @@ export default function DashboardPage() {
 		}
 	}, [isClerkLoaded, clerkUser, user, getOrCreateUser]);
 
-	useEffect(() => {
-		if (user && !user.onboardingCompletedAt) {
-			router.replace("/onboarding");
-		}
-	}, [user, router]);
-
 	if (!isClerkLoaded || user === undefined) {
 		return (
 			<div className="flex min-h-screen flex-col p-4">

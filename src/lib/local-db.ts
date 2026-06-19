@@ -16,6 +16,7 @@ export interface User {
   email: string;
   tier: "free" | "pro";
   onboardingCompleted?: boolean;
+  onboardingCompletedAt?: number;
   goals?: string[];
   experienceLevel?: "beginner" | "intermediate" | "advanced";
   weeklyAvailability?: number;
@@ -317,7 +318,22 @@ export function getOrCreateCurrentUser(): User {
     name: "Usuario Local",
     email: "local@opentrainer.app",
     tier: "pro", // Default to pro so AI alpha features work
-    onboardingCompleted: false,
+    onboardingCompleted: true,
+    onboardingCompletedAt: Date.now(),
+    goals: ["general_fitness"],
+    experienceLevel: "intermediate",
+    weeklyAvailability: 4,
+    sessionDuration: 60,
+    equipment: [
+      "barbell", "dumbbells", "kettlebells", "ez_curl_bar",
+      "power_rack", "squat_rack", "smith_machine", "flat_bench", "incline_bench", "adjustable_bench",
+      "cable_machine", "lat_pulldown", "cable_crossover",
+      "leg_press", "hack_squat", "leg_curl", "leg_extension",
+      "chest_press_machine", "shoulder_press_machine", "row_machine", "pec_deck",
+      "pull_up_bar", "dip_station", "rings",
+      "resistance_bands", "trx", "landmine", "cable_attachments",
+      "treadmill", "rower", "bike", "stairmaster", "elliptical"
+    ],
     createdAt: Date.now(),
   };
 
