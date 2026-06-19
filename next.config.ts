@@ -17,6 +17,13 @@ const nextConfig: NextConfig = {
   },
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
+  turbopack: {
+    resolveAlias: {
+      "convex/react": "./src/lib/mock-convex-react.ts",
+      "@clerk/nextjs": "./src/lib/mock-clerk.tsx",
+      "@clerk/nextjs/experimental": "./src/lib/mock-clerk.tsx",
+    },
+  },
   webpack: (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
