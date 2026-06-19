@@ -167,7 +167,7 @@ export function AddExerciseSheet({
                   {!muscleGroups ? (
                     <p className="text-sm text-muted-foreground">Loading muscle groups...</p>
                   ) : (
-                    muscleGroups.map((muscle) => (
+                    (muscleGroups as string[]).map((muscle: string) => (
                       <Badge
                         key={muscle}
                         variant={selectedMuscleGroups.includes(muscle) ? "default" : "outline"}
@@ -188,7 +188,7 @@ export function AddExerciseSheet({
 
           <div className="flex-1 overflow-y-auto -mx-4 px-4 pb-8">
             <div className="grid grid-cols-1 gap-2">
-              {exercises?.map((exercise) => (
+              {(exercises as any[])?.map((exercise: any) => (
                 <button
                   key={exercise._id}
                   className="flex items-center justify-between h-14 px-4 rounded-lg border bg-card text-left transition-colors hover:bg-muted/50 active:bg-muted/70"

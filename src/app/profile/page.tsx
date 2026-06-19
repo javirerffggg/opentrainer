@@ -101,11 +101,11 @@ export default function ProfilePage() {
     );
   }
 
-  const completedWorkouts = workouts?.filter(w => w.status === "completed") ?? [];
-  const totalSets = completedWorkouts.reduce((acc, w) => acc + (w.summary?.totalSets ?? 0), 0);
-  const totalVolume = completedWorkouts.reduce((acc, w) => acc + (w.summary?.totalVolume ?? 0), 0);
+  const completedWorkouts = workouts?.filter((w: any) => w.status === "completed") ?? [];
+  const totalSets = completedWorkouts.reduce((acc: number, w: any) => acc + (w.summary?.totalSets ?? 0), 0);
+  const totalVolume = completedWorkouts.reduce((acc: number, w: any) => acc + (w.summary?.totalVolume ?? 0), 0);
 
-  const goalsDisplay = user?.goals?.map(g => GOAL_LABELS[g] ?? g).join(", ") || "Not set";
+  const goalsDisplay = user?.goals?.map((g: any) => GOAL_LABELS[g as keyof typeof GOAL_LABELS] ?? g).join(", ") || "Not set";
   const experienceDisplay = user?.experienceLevel ? EXPERIENCE_LABELS[user.experienceLevel] : "Not set";
   const equipmentCount = user?.equipment?.length ?? 0;
   const equipmentDisplay = user?.equipmentDescription
@@ -145,27 +145,57 @@ export default function ProfilePage() {
 
   const handleGenerateAiLink = async () => {
     try {
-      await generateShareToken();
+      const token = await generateShareToken();
+      if (token) {
+        const data = await convex.query(api.users.exportAllData, {});
+        await fetch("/api/exportProfile", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token, data }),
+        });
+        toast.success("Enlace de IA generado y sincronizado");
+      }
     } catch (error) {
       console.error("Failed to generate token:", error);
+      toast.error("Error al generar enlace de IA");
     }
   };
 
   const handleRevokeAiLink = async () => {
     try {
       await revokeShareToken();
+      toast.success("Acceso revocado");
     } catch (error) {
       console.error("Failed to revoke token:", error);
+      toast.error("Error al revocar enlace");
     }
   };
 
-  const handleCopyAiLink = () => {
+  const handleCopyAiLink = async () => {
     if (!user?.shareToken) return;
-    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "";
-    const siteUrl = convexUrl.replace(".cloud", ".site");
-    const url = `${siteUrl}/api/exportProfile?token=${user.shareToken}`;
-    navigator.clipboard.writeText(url);
-    toast.success("Enlace copiado al portapapeles");
+    try {
+      const data = await convex.query(api.users.exportAllData, {});
+      await fetch("/api/exportProfile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token: user.shareToken, data }),
+      });
+      const siteUrl = window.location.origin;
+      const url = `${siteUrl}/api/exportProfile?token=${user.shareToken}`;
+      navigator.clipboard.writeText(url);
+      toast.success("Datos sincronizados y enlace copiado al portapapeles");
+    } catch (error) {
+      console.error("Sync and copy failed:", error);
+      // fallback copy
+      const siteUrl = window.location.origin;
+      const url = `${siteUrl}/api/exportProfile?token=${user.shareToken}`;
+      navigator.clipboard.writeText(url);
+      toast.success("Enlace copiado al portapapeles");
+    }
   };
 
   return (
@@ -464,7 +494,7 @@ export default function ProfilePage() {
                 <div className="rounded-md bg-muted/50 p-3 space-y-2">
                   <div className="flex items-center justify-between gap-2">
                     <code className="text-xs truncate text-muted-foreground flex-1">
-                      {process.env.NEXT_PUBLIC_CONVEX_URL?.replace(".cloud", ".site")}/api/exportProfile?token={user.shareToken}
+                      {typeof window !== "undefined" ? window.location.origin : ""}/api/exportProfile?token={user.shareToken}
                     </code>
                     <Button variant="secondary" size="sm" onClick={handleCopyAiLink}>
                       <Copy className="h-3 w-3 mr-1" /> Copiar

@@ -108,7 +108,7 @@ function EditExerciseForm({
 		setMuscleGroupsOverride((prev) => {
 			const current = prev ?? exerciseData?.muscleGroups ?? [];
 			return current.includes(muscle)
-				? current.filter((m) => m !== muscle)
+				? current.filter((m: string) => m !== muscle)
 				: [...current, muscle];
 		});
 	};
@@ -241,7 +241,7 @@ function EditExerciseForm({
 								{!availableMuscleGroups ? (
 									<p className="text-sm text-muted-foreground">Loading muscle groups...</p>
 								) : (
-									availableMuscleGroups.map((muscle) => (
+									(availableMuscleGroups as string[]).map((muscle: string) => (
 										<Badge
 											key={muscle}
 											variant={muscleGroups.includes(muscle) ? "default" : "outline"}

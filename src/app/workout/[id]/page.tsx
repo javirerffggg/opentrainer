@@ -357,7 +357,7 @@ export default function WorkoutDetailsPage() {
           <div className="space-y-4">
             {groupedExercises.map((exercise) => {
               const exerciseNote = workout.exerciseNotes?.find(
-                (n) => n.exerciseName === exercise.name
+                (n: any) => n.exerciseName === exercise.name
               )?.note;
 
               return (

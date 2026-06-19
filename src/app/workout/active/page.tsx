@@ -174,7 +174,7 @@ export default function ActiveWorkoutPage() {
 	const createExercise = useMutation(api.exercises.createExercise);
 
 	const getExerciseNote = (exerciseName: string): string | undefined => {
-		return workout?.exerciseNotes?.find((n) => n.exerciseName === exerciseName)
+		return workout?.exerciseNotes?.find((n: any) => n.exerciseName === exerciseName)
 			?.note;
 	};
 
@@ -241,7 +241,7 @@ export default function ActiveWorkoutPage() {
 			routineExercises.length > 0 &&
 			pendingExercises.length === 0
 		) {
-			const pending: PendingExercise[] = routineExercises.map((ex) => {
+			const pending: PendingExercise[] = routineExercises.map((ex: any) => {
 				const exerciseWithEquipment = ex as typeof ex & {
 					equipment?: string[];
 				};

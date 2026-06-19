@@ -187,7 +187,7 @@ export default function DashboardPage() {
 						</div>
 					) : (
 						<div className="flex flex-col gap-4">
-							{workoutHistory.map((workout) => (
+							{workoutHistory.map((workout: any) => (
 								<Link key={workout._id} href={`/workout/${workout._id}`}>
 									<div className="rounded-xl border bg-card p-4 transition-colors hover:bg-muted/50">
 										<div className="flex items-start justify-between">

@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -16,6 +17,15 @@ const nextConfig: NextConfig = {
   },
   // This is required to support PostHog trailing slash API requests
   skipTrailingSlashRedirect: true,
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "convex/react": path.resolve(process.cwd(), "src/lib/mock-convex-react.ts"),
+      "@clerk/nextjs": path.resolve(process.cwd(), "src/lib/mock-clerk.tsx"),
+      "@clerk/nextjs/experimental": path.resolve(process.cwd(), "src/lib/mock-clerk.tsx"),
+    };
+    return config;
+  },
 };
 
 export default nextConfig;
