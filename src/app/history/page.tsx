@@ -38,7 +38,7 @@ export default function HistoryPage() {
   });
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
+    return new Date(timestamp).toLocaleDateString("es-ES", {
       weekday: "short",
       month: "short",
       day: "numeric",
@@ -78,7 +78,7 @@ export default function HistoryPage() {
       .sort(([a], [b]) => b.localeCompare(a))
       .map(([key, items]) => ({
         key,
-        label: new Date(items[0].startedAt).toLocaleDateString("en-US", { 
+        label: new Date(items[0].startedAt).toLocaleDateString("es-ES", { 
           month: "long", 
           year: "numeric" 
         }),
@@ -111,7 +111,7 @@ export default function HistoryPage() {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
         <div className="flex h-14 items-center px-4">
-          <h1 className="font-semibold text-lg">Workout History</h1>
+          <h1 className="font-semibold text-lg">Historial de Entrenamientos</h1>
         </div>
       </header>
 
@@ -119,12 +119,12 @@ export default function HistoryPage() {
         {workouts.length === 0 ? (
           <Card className="p-8 text-center">
             <Dumbbell className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <h2 className="mb-2 font-semibold">No workouts yet</h2>
+            <h2 className="mb-2 font-semibold">Aún no hay entrenamientos</h2>
             <p className="mb-4 text-sm text-muted-foreground">
-              Complete your first workout to see it here!
+              ¡Completa tu primer entrenamiento para verlo aquí!
             </p>
             <Link href="/dashboard">
-              <Button>Start a Workout</Button>
+              <Button>Comenzar un Entrenamiento</Button>
             </Link>
           </Card>
         ) : (
@@ -146,11 +146,11 @@ export default function HistoryPage() {
                           <div className="flex-1">
                             <div className="flex items-center gap-2">
                               <p className="font-medium">
-                                {workout.title ?? "Workout"}
+                                {workout.title ?? "Entrenamiento"}
                               </p>
                               {workout.status === "cancelled" && (
                                 <Badge variant="secondary" className="text-xs">
-                                  Cancelled
+                                  Cancelado
                                 </Badge>
                               )}
                             </div>
@@ -172,14 +172,14 @@ export default function HistoryPage() {
                               <>
                                 <p className="font-mono font-medium tabular-nums">
                                   {(workout.summary.totalSets ?? 0) > 0
-                                    ? `${workout.summary.totalSets} sets`
+                                    ? `${workout.summary.totalSets} series`
                                     : workout.summary.totalCardioDurationSeconds
                                       ? formatCardioDuration(workout.summary.totalCardioDurationSeconds)
-                                      : `${workout.summary.exerciseCount ?? 0} exercises`}
+                                      : `${workout.summary.exerciseCount ?? 0} ejercicios`}
                                 </p>
                                 <p className="text-xs text-muted-foreground font-mono tabular-nums">
                                   {(workout.summary.totalSets ?? 0) > 0
-                                    ? `${workout.summary.exerciseCount ?? 0} exercises`
+                                    ? `${workout.summary.exerciseCount ?? 0} ejercicios`
                                     : workout.summary.totalCardioDurationSeconds
                                       ? "cardio"
                                       : ""}

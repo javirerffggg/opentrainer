@@ -48,7 +48,7 @@ export default function RoutinesPage() {
   const [showStartSheet, setShowStartSheet] = useState(false);
 
   const formatDate = (timestamp: number) => {
-    return new Date(timestamp).toLocaleDateString("en-US", {
+    return new Date(timestamp).toLocaleDateString("es-ES", {
       month: "short",
       day: "numeric",
       year: "numeric",
@@ -60,7 +60,7 @@ export default function RoutinesPage() {
       case "ai_generated":
         return <Badge variant="secondary">AI</Badge>;
       case "imported":
-        return <Badge variant="outline">Imported</Badge>;
+        return <Badge variant="outline">Importada</Badge>;
       default:
         return null;
     }
@@ -90,16 +90,16 @@ export default function RoutinesPage() {
     <div className="flex min-h-screen flex-col">
       <header className="sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
         <div className="flex h-14 items-center gap-4 px-4">
-          <h1 className="flex-1 font-semibold text-lg">My Routines</h1>
+          <h1 className="flex-1 font-semibold text-lg">Mis Rutinas</h1>
           <Link href="/routines/new">
             <Button size="sm">
               <Plus className="mr-1 h-4 w-4" />
-              New
+              Nueva
             </Button>
           </Link>
           <Button variant="outline" size="sm" onClick={() => setShowImport(true)}>
             <Download className="mr-1 h-4 w-4" />
-            Import
+            Importar
           </Button>
         </div>
       </header>
@@ -108,15 +108,15 @@ export default function RoutinesPage() {
         {routines.length === 0 ? (
           <Card className="p-8 text-center">
             <Dumbbell className="mx-auto mb-4 h-12 w-12 text-muted-foreground" />
-            <h2 className="mb-2 font-semibold">No routines yet</h2>
+            <h2 className="mb-2 font-semibold">Aún no hay rutinas</h2>
             <p className="mb-4 text-sm text-muted-foreground">
-              Create a routine from scratch, or save one from a completed workout.
+              Crea una rutina desde cero, o guarda una de un entrenamiento completado.
             </p>
             <div className="flex flex-col gap-2 sm:flex-row sm:justify-center">
               <Link href="/routines/new">
                 <Button className="w-full sm:w-auto">
                   <Plus className="mr-2 h-4 w-4" />
-                  Create Routine
+                  Crear Rutina
                 </Button>
               </Link>
               <Button
@@ -125,7 +125,7 @@ export default function RoutinesPage() {
                 onClick={() => setShowImport(true)}
               >
                 <Download className="mr-2 h-4 w-4" />
-                Import
+                Importar
               </Button>
             </div>
           </Card>
@@ -150,7 +150,7 @@ export default function RoutinesPage() {
                     )}
                     <div className="mt-2 flex items-center gap-3 text-xs text-muted-foreground">
                       <span className="font-mono tabular-nums">
-                        {routine.days.length} day{routine.days.length !== 1 ? "s" : ""}
+                        {routine.days.length} día{routine.days.length !== 1 ? "s" : ""}
                       </span>
                       <span className="flex items-center gap-1">
                         <Calendar className="h-3 w-3" />

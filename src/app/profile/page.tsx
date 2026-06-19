@@ -1,10 +1,11 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { useQuery, useConvex } from "convex/react";
+import { useQuery, useMutation, useConvex } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { Card } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Button } from "@/components/ui/button";
 import { UserButton, useUser, useClerk } from "@clerk/nextjs";
 import { SubscriptionDetailsButton } from "@clerk/nextjs/experimental";
 import {
@@ -24,9 +25,13 @@ import {
   Download,
   Loader2,
   Ruler,
+  Link as LinkIcon,
+  Copy,
+  Globe,
 } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { toast } from "sonner";
 import { BottomNav } from "@/components/navigation/bottom-nav";
 import { StartWorkoutSheet } from "@/components/workout/start-workout-sheet";
 import { EditGoalsDialog } from "@/components/profile/edit-goals-dialog";
@@ -58,6 +63,9 @@ export default function ProfilePage() {
   const user = useQuery(api.users.getCurrentUser);
   const isPro = user?.tier === "pro";
   const workouts = useQuery(api.workouts.getWorkoutHistory, { limit: 1000, status: "all" });
+
+  const generateShareToken = useMutation(api.users.generateShareToken);
+  const revokeShareToken = useMutation(api.users.revokeShareToken);
 
   const [showStartSheet, setShowStartSheet] = useState(false);
   const [showGoalsDialog, setShowGoalsDialog] = useState(false);
@@ -133,6 +141,31 @@ export default function ProfilePage() {
     } finally {
       setIsExporting(false);
     }
+  };
+
+  const handleGenerateAiLink = async () => {
+    try {
+      await generateShareToken();
+    } catch (error) {
+      console.error("Failed to generate token:", error);
+    }
+  };
+
+  const handleRevokeAiLink = async () => {
+    try {
+      await revokeShareToken();
+    } catch (error) {
+      console.error("Failed to revoke token:", error);
+    }
+  };
+
+  const handleCopyAiLink = () => {
+    if (!user?.shareToken) return;
+    const convexUrl = process.env.NEXT_PUBLIC_CONVEX_URL || "";
+    const siteUrl = convexUrl.replace(".cloud", ".site");
+    const url = `${siteUrl}/api/exportProfile?token=${user.shareToken}`;
+    navigator.clipboard.writeText(url);
+    toast.success("Enlace copiado al portapapeles");
   };
 
   return (
@@ -415,6 +448,40 @@ export default function ProfilePage() {
                 </div>
               </button>
             </Card>
+
+            <Card className="p-4 flex flex-col gap-3">
+              <div className="flex items-start justify-between">
+                <div className="flex items-center gap-3">
+                  <Globe className="h-5 w-5 text-muted-foreground" />
+                  <div className="text-left">
+                    <span className="font-medium">Exportar para IA (JSON)</span>
+                    <p className="text-sm text-muted-foreground">Genera una URL pública con tus datos para pasarla a Gemini o Perplexity</p>
+                  </div>
+                </div>
+              </div>
+
+              {user?.shareToken ? (
+                <div className="rounded-md bg-muted/50 p-3 space-y-2">
+                  <div className="flex items-center justify-between gap-2">
+                    <code className="text-xs truncate text-muted-foreground flex-1">
+                      {process.env.NEXT_PUBLIC_CONVEX_URL?.replace(".cloud", ".site")}/api/exportProfile?token={user.shareToken}
+                    </code>
+                    <Button variant="secondary" size="sm" onClick={handleCopyAiLink}>
+                      <Copy className="h-3 w-3 mr-1" /> Copiar
+                    </Button>
+                  </div>
+                  <Button variant="ghost" size="sm" className="w-full text-destructive text-xs h-7" onClick={handleRevokeAiLink}>
+                    Revocar acceso
+                  </Button>
+                </div>
+              ) : (
+                <Button variant="outline" className="w-full" onClick={handleGenerateAiLink}>
+                  <LinkIcon className="h-4 w-4 mr-2" />
+                  Generar URL Pública
+                </Button>
+              )}
+            </Card>
+
             <Card className="p-4">
               <button
                 type="button"

@@ -17,9 +17,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "OpenTrainer - AI-Powered Workout Tracking",
+	title: "OpenTrainer - Seguimiento de Entrenamientos con IA",
 	description:
-		"Minimalist, AI-first workout tracking. Log lifts and cardio with ease, get AI-powered routine suggestions and performance assessments.",
+		"Seguimiento de entrenamientos minimalista y con IA. Registra levantamientos y cardio fácilmente, obtén rutinas sugeridas por IA y evaluaciones de rendimiento.",
 	manifest: "/manifest.json",
 	icons: {
 		icon: [
@@ -35,8 +35,8 @@ export const metadata: Metadata = {
 		title: "OpenTrainer",
 	},
 	openGraph: {
-		title: "OpenTrainer - AI-Powered Workout Tracking",
-		description: "Log workouts, get AI coaching. Simple as that.",
+		title: "OpenTrainer - Seguimiento de Entrenamientos con IA",
+		description: "Registra entrenamientos, obtén coaching de IA. Así de simple.",
 		type: "website",
 	},
 };
@@ -58,7 +58,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="es" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen`}
 			>

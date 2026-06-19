@@ -16,25 +16,25 @@ const NAV_ITEMS: NavItem[] = [
   { 
     href: "/dashboard", 
     icon: Home, 
-    label: "Home",
+    label: "Inicio",
     matchPaths: ["/dashboard"]
   },
   { 
     href: "/history", 
     icon: History, 
-    label: "History",
+    label: "Historial",
     matchPaths: ["/history", "/workout/"]
   },
   { 
     href: "/routines", 
     icon: Dumbbell, 
-    label: "Routines",
+    label: "Rutinas",
     matchPaths: ["/routines"]
   },
   { 
     href: "/profile", 
     icon: User, 
-    label: "Profile",
+    label: "Perfil",
     matchPaths: ["/profile", "/settings"]
   },
 ];

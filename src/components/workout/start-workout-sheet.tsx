@@ -50,10 +50,10 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
     const errorMessage = error instanceof Error ? error.message : String(error);
     
     if (errorMessage.includes("already have an active workout")) {
-      toast.error("Active workout exists", {
-        description: "Complete or cancel your current workout first.",
+      toast.error("Hay un entrenamiento activo", {
+        description: "Completa o cancela tu entrenamiento actual primero.",
         action: {
-          label: "Go to workout",
+          label: "Ir al entrenamiento",
           onClick: () => {
             onOpenChange(false);
             router.push("/workout/active");
@@ -61,7 +61,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
         },
       });
     } else {
-      toast.error("Failed to start workout");
+      toast.error("Error al iniciar el entrenamiento");
     }
     console.error(error);
   };
@@ -79,9 +79,9 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
     try {
       vibrate("warning");
       await cancelWorkout({ workoutId: activeWorkout._id });
-      toast.success("Previous workout cancelled");
+      toast.success("Entrenamiento anterior cancelado");
     } catch (error) {
-      toast.error("Failed to cancel workout");
+      toast.error("Error al cancelar el entrenamiento");
       console.error(error);
     } finally {
       setIsCancelling(false);
@@ -142,9 +142,9 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
     const isToday = date.toDateString() === now.toDateString();
     
     if (isToday) {
-      return `Today at ${date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}`;
+      return `Hoy a las ${date.toLocaleTimeString("es-ES", { hour: "numeric", minute: "2-digit" })}`;
     }
-    return date.toLocaleDateString("en-US", { 
+    return date.toLocaleDateString("es-ES", { 
       weekday: "short", 
       month: "short", 
       day: "numeric",
@@ -160,10 +160,10 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
           <DrawerHeader>
             <DrawerTitle className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-amber-500" />
-              Workout In Progress
+              Entrenamiento en Curso
             </DrawerTitle>
             <DrawerDescription>
-              You already have an active workout. What would you like to do?
+              Ya tienes un entrenamiento activo. ¿Qué te gustaría hacer?
             </DrawerDescription>
           </DrawerHeader>
 
@@ -174,9 +174,9 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                   <Dumbbell className="h-5 w-5 text-primary" />
                 </div>
                 <div>
-                  <p className="font-medium">{activeWorkout.title ?? "Workout"}</p>
+                  <p className="font-medium">{activeWorkout.title ?? "Entrenamiento"}</p>
                   <p className="text-sm text-muted-foreground">
-                    Started {formatWorkoutTime(activeWorkout.startedAt)}
+                    Iniciado {formatWorkoutTime(activeWorkout.startedAt)}
                   </p>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                 onClick={handleContinueWorkout}
               >
                 <Play className="mr-2 h-5 w-5" />
-                Continue Workout
+                Continuar Entrenamiento
               </Button>
               
               <Button
@@ -200,12 +200,12 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                 disabled={isCancelling || isStarting}
               >
                 <X className="mr-2 h-5 w-5" />
-                {isCancelling ? "Cancelling..." : "Cancel & Start New"}
+                {isCancelling ? "Cancelando..." : "Cancelar y Comenzar Nuevo"}
               </Button>
             </div>
 
             <p className="text-xs text-center text-muted-foreground">
-              Cancelling will discard all progress from your current workout.
+              Cancelar descartará todo el progreso de tu entrenamiento actual.
             </p>
           </div>
         </DrawerContent>
@@ -217,9 +217,9 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="h-[85vh] flex flex-col">
         <DrawerHeader>
-          <DrawerTitle>Start Workout</DrawerTitle>
+          <DrawerTitle>Comenzar Entrenamiento</DrawerTitle>
           <DrawerDescription>
-            Start from scratch or use a saved routine
+            Comienza desde cero o usa una rutina guardada
           </DrawerDescription>
         </DrawerHeader>
 
@@ -231,7 +231,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
             disabled={isStarting}
           >
             <Zap className="mr-2 h-5 w-5" />
-            Empty Workout
+            Entrenamiento Vacío
           </Button>
 
           {routines === undefined ? (
@@ -243,7 +243,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
           ) : routines.length > 0 ? (
             <section>
               <h3 className="text-sm font-mono uppercase tracking-wider text-muted-foreground mb-3">
-                From Routine
+                Desde Rutina
               </h3>
               <div className="space-y-2">
                 {(routines as Routine[]).map((routine) => (
@@ -259,7 +259,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                         <div>
                           <p className="font-medium">{routine.name}</p>
                           <p className="text-sm text-muted-foreground font-mono tabular-nums">
-                            {routine.days.length} day{routine.days.length !== 1 ? "s" : ""}
+                            {routine.days.length} día{routine.days.length !== 1 ? "s" : ""}
                           </p>
                         </div>
                       </div>
@@ -283,7 +283,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                               <p className="font-medium">{day.name}</p>
                               <p className="text-xs text-muted-foreground truncate">
                                 {day.exercises.slice(0, 3).map(e => e.exerciseName).join(", ")}
-                                {day.exercises.length > 3 && ` +${day.exercises.length - 3} more`}
+                                {day.exercises.length > 3 && ` +${day.exercises.length - 3} más`}
                               </p>
                             </div>
                             <Play className="ml-3 h-4 w-4 shrink-0 text-primary" />
@@ -298,9 +298,9 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
           ) : (
             <Card className="p-6 text-center">
               <Dumbbell className="mx-auto mb-3 h-8 w-8 text-muted-foreground" />
-              <p className="font-medium mb-1">No routines yet</p>
+              <p className="font-medium mb-1">Aún no hay rutinas</p>
               <p className="text-sm text-muted-foreground mb-4">
-                Create a routine to quickly start similar workouts
+                Crea una rutina para comenzar rápidamente entrenamientos similares
               </p>
               <Button
                 variant="outline"
@@ -309,7 +309,7 @@ export function StartWorkoutSheet({ open, onOpenChange, activeWorkout }: StartWo
                   router.push("/routines/new");
                 }}
               >
-                Create Routine
+                Crear Rutina
               </Button>
             </Card>
           )}

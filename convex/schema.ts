@@ -60,12 +60,16 @@ export default defineSchema({
     // Onboarding tracking
     onboardingCompletedAt: v.optional(v.number()),
     
+    // AI Profile Sharing
+    shareToken: v.optional(v.string()),
+    
     // Timestamps
     createdAt: v.number(),
     updatedAt: v.number(),
   })
     .index("by_clerk_id", ["clerkId"])
-    .index("by_email", ["email"]),
+    .index("by_email", ["email"])
+    .index("by_share_token", ["shareToken"]),
 
   // --------------------------------------------------------------------------
   // Exercises Table

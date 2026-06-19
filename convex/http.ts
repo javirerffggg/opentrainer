@@ -146,6 +146,42 @@ http.route({
   }),
 });
 
+http.route({
+  path: "/api/exportProfile",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    const url = new URL(request.url);
+    const token = url.searchParams.get("token");
+
+    if (!token) {
+      return new Response(JSON.stringify({ error: "Missing token" }), {
+        status: 400,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    const user = await ctx.runQuery(internal.http.getUserByShareToken, { token });
+
+    if (!user) {
+      return new Response(JSON.stringify({ error: "Invalid token" }), {
+        status: 401,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+
+    // Call a query to gather all the user's data
+    const exportData = await ctx.runQuery(internal.http.getExportDataForUser, { userId: user._id });
+
+    return new Response(JSON.stringify(exportData), {
+      status: 200,
+      headers: { 
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+      },
+    });
+  }),
+});
+
 interface WebhookEvent {
   type: string;
   data: Record<string, unknown>;

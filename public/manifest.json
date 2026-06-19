@@ -2,7 +2,7 @@
 	"id": "/",
 	"name": "OpenTrainer",
 	"short_name": "OpenTrainer",
-	"description": "AI-powered workout tracking. Log lifts and cardio, get personalized coaching that adapts to you.",
+	"description": "Seguimiento de entrenamientos con IA. Registra tus levantamientos y cardio, obtén entrenamiento personalizado que se adapta a ti.",
 	"start_url": "/",
 	"display": "standalone",
 	"display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
@@ -10,7 +10,7 @@
 	"theme_color": "#1c1a22",
 	"orientation": "portrait-primary",
 	"scope": "/",
-	"lang": "en",
+	"lang": "es",
 	"dir": "ltr",
 	"prefer_related_applications": false,
 	"launch_handler": {
@@ -46,23 +46,23 @@
 	"categories": ["health", "fitness", "lifestyle", "sports"],
 	"shortcuts": [
 		{
-			"name": "Start Workout",
-			"short_name": "Workout",
-			"description": "Begin a new workout session",
+			"name": "Comenzar Entrenamiento",
+			"short_name": "Entrenamiento",
+			"description": "Comenzar una nueva sesión de entrenamiento",
 			"url": "/workout/active",
 			"icons": [{ "src": "/icons/workout-shortcut.png", "sizes": "96x96" }]
 		},
 		{
-			"name": "View History",
-			"short_name": "History",
-			"description": "See your workout history",
+			"name": "Ver Historial",
+			"short_name": "Historial",
+			"description": "Ver tu historial de entrenamientos",
 			"url": "/history",
 			"icons": [{ "src": "/icons/history-shortcut.png", "sizes": "96x96" }]
 		},
 		{
-			"name": "Training Lab",
-			"short_name": "Lab",
-			"description": "AI-powered training insights",
+			"name": "Laboratorio",
+			"short_name": "Laboratorio",
+			"description": "Análisis de entrenamiento con IA",
 			"url": "/training-lab",
 			"icons": [{ "src": "/icons/lab-shortcut.png", "sizes": "96x96" }]
 		}
@@ -73,14 +73,14 @@
 			"sizes": "1170x2532",
 			"type": "image/png",
 			"form_factor": "narrow",
-			"label": "Dashboard with weekly stats"
+			"label": "Inicio con estadísticas semanales"
 		},
 		{
 			"src": "/screenshots/workout.png",
 			"sizes": "1170x2532",
 			"type": "image/png",
 			"form_factor": "narrow",
-			"label": "Active workout tracking"
+			"label": "Seguimiento de entrenamiento activo"
 		}
 	],
 	"edge_side_panel": {

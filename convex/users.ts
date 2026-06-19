@@ -425,3 +425,125 @@ export const deleteAccount = mutation({
     return { success: true };
   },
 });
+
+export const generateShareToken = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getAuthUser(ctx);
+    if (!user) throw new Error("User not found");
+
+    if (user.shareToken) {
+      return user.shareToken;
+    }
+
+    const token = crypto.randomUUID();
+    await ctx.db.patch(user._id, {
+      shareToken: token,
+      updatedAt: Date.now(),
+    });
+
+    return token;
+  },
+});
+
+export const revokeShareToken = mutation({
+  args: {},
+  handler: async (ctx) => {
+    const user = await getAuthUser(ctx);
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, {
+      shareToken: undefined,
+      updatedAt: Date.now(),
+    });
+
+    return true;
+  },
+});
+
+export const getUserByShareToken = internalQuery({
+  args: { token: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("users")
+      .withIndex("by_share_token", (q) => q.eq("shareToken", args.token))
+      .first();
+  },
+});
+
+export const getExportDataForUser = internalQuery({
+  args: { userId: v.id("users") },
+  handler: async (ctx, args) => {
+    const user = await ctx.db.get(args.userId);
+    if (!user) throw new Error("User not found");
+
+    const workouts = await ctx.db
+      .query("workouts")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .collect();
+
+    const workoutsWithEntries = await Promise.all(
+      workouts.map(async (workout) => {
+        const entries = await ctx.db
+          .query("entries")
+          .withIndex("by_workout", (q) => q.eq("workoutId", workout._id))
+          .collect();
+
+        return {
+          id: workout._id,
+          title: workout.title,
+          status: workout.status,
+          startedAt: new Date(workout.startedAt).toISOString(),
+          completedAt: workout.completedAt
+            ? new Date(workout.completedAt).toISOString()
+            : null,
+          summary: workout.summary,
+          notes: workout.notes,
+          exerciseNotes: workout.exerciseNotes,
+          entries: entries.map((entry) => ({
+            exerciseName: entry.exerciseName,
+            kind: entry.kind,
+            lifting: entry.lifting,
+            cardio: entry.cardio,
+            mobility: entry.mobility,
+            notes: entry.notes,
+            createdAt: new Date(entry.createdAt).toISOString(),
+          })),
+        };
+      })
+    );
+
+    const routines = await ctx.db
+      .query("routines")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .collect();
+
+    const routinesExport = routines.map((routine) => ({
+      id: routine._id,
+      name: routine.name,
+      description: routine.description,
+      source: routine.source,
+      days: routine.days,
+      tags: routine.tags,
+      isActive: routine.isActive,
+      createdAt: new Date(routine.createdAt).toISOString(),
+      updatedAt: new Date(routine.updatedAt).toISOString(),
+    }));
+
+    return {
+      exportedAt: new Date().toISOString(),
+      user: {
+        name: user.name,
+        goals: user.goals,
+        experienceLevel: user.experienceLevel,
+        equipment: user.equipment,
+        equipmentDescription: user.equipmentDescription,
+        preferredUnits: user.preferredUnits,
+        bodyweight: user.bodyweight,
+      },
+      workouts: workoutsWithEntries,
+      routines: routinesExport,
+    };
+  },
+});
+

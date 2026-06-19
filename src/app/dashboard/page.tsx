@@ -82,7 +82,7 @@ export default function DashboardPage() {
 			<div className="flex min-h-screen flex-col items-center justify-center p-4">
 				<Skeleton className="h-8 w-32" />
 				<p className="mt-2 text-sm text-muted-foreground">
-					Setting up your account...
+					Configurando tu cuenta...
 				</p>
 			</div>
 		);
@@ -128,7 +128,7 @@ export default function DashboardPage() {
 			</header>
 
 			<main className="flex-1 space-y-4 p-4 pb-24">
-				<h1 className="sr-only">Dashboard</h1>
+				<h1 className="sr-only">Inicio</h1>
 
 				{dashboardStats && activeWorkout !== undefined && workoutHistory !== undefined ? (
 					<DashboardBriefCard
@@ -165,14 +165,14 @@ export default function DashboardPage() {
 				<section>
 					<div className="mb-3 flex items-center justify-between">
 						<h2 className="text-sm font-mono uppercase tracking-wider text-muted-foreground">
-							Recent
+							Reciente
 						</h2>
 						{workoutHistory && workoutHistory.length > 0 && (
 							<Link
 								href="/history"
 								className="text-xs text-muted-foreground hover:text-foreground"
 							>
-								View all
+								Ver todo
 							</Link>
 						)}
 					</div>
@@ -183,7 +183,7 @@ export default function DashboardPage() {
 						</div>
 					) : workoutHistory.length === 0 ? (
 						<div className="rounded-lg border border-dashed p-6 text-center text-muted-foreground">
-							<p className="text-sm">No workouts yet</p>
+							<p className="text-sm">Aún no hay entrenamientos</p>
 						</div>
 					) : (
 						<div className="flex flex-col gap-4">
@@ -193,7 +193,7 @@ export default function DashboardPage() {
 										<div className="flex items-start justify-between">
 											<div className="space-y-1">
 												<p className="font-semibold">
-													{workout.title ?? "Workout"}
+													{workout.title ?? "Entrenamiento"}
 												</p>
 												<p className="text-sm text-muted-foreground">
 													{formatDate(workout.startedAt)}
@@ -203,7 +203,7 @@ export default function DashboardPage() {
 										<div className="mt-3 flex gap-4 border-t pt-3">
 											<div>
 												<p className="text-xs text-muted-foreground">
-													Duration
+													Duración
 												</p>
 												<p className="font-mono font-medium">
 													{formatDuration(
@@ -214,7 +214,7 @@ export default function DashboardPage() {
 											</div>
 											{(workout.summary?.totalSets ?? 0) > 0 ? (
 												<div>
-													<p className="text-xs text-muted-foreground">Sets</p>
+													<p className="text-xs text-muted-foreground">Series</p>
 													<p className="font-mono font-medium">
 														{workout.summary?.totalSets}
 													</p>
@@ -229,7 +229,7 @@ export default function DashboardPage() {
 											) : null}
 											<div>
 												<p className="text-xs text-muted-foreground">
-													Exercises
+													Ejercicios
 												</p>
 												<p className="font-mono font-medium">
 													{workout.summary?.exerciseCount ?? 0}

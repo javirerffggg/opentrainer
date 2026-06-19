@@ -24,17 +24,17 @@ export default function Home() {
             <SignedOut>
               <SignInButton mode="modal">
                 <Button variant="ghost" size="sm">
-                  Sign In
+                  Iniciar sesión
                 </Button>
               </SignInButton>
               <SignUpButton mode="modal">
-                <Button size="sm">Get Started</Button>
+                <Button size="sm">Empezar</Button>
               </SignUpButton>
             </SignedOut>
             <SignedIn>
               <Link href="/dashboard">
                 <Button variant="ghost" size="sm">
-                  Dashboard
+                  Inicio
                 </Button>
               </Link>
               <UserButton afterSignOutUrl="/" />
@@ -63,17 +63,17 @@ export default function Home() {
             <div className="flex flex-col items-center gap-6 text-center lg:grid lg:grid-cols-2 lg:items-center lg:gap-12 lg:text-left">
               <div className="flex flex-col items-center gap-5 lg:items-start lg:gap-6">
                 <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-4 py-1.5 text-xs sm:text-sm font-medium text-primary">
-                  Alpha Launch: First 1,000 users get Pro free for life
+                  Lanzamiento Alpha: Los primeros 1.000 usuarios obtienen Pro gratis de por vida
                 </div>
                 <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
-                  Log workouts in seconds,
+                  Registra entrenamientos en segundos,
                   <br />
-                  <span className="text-muted-foreground">not minutes.</span>
+                  <span className="text-muted-foreground">no en minutos.</span>
                 </h1>
                 <p className="max-w-md text-lg text-muted-foreground sm:text-xl lg:max-w-xl">
-                  Strong logs fast. Fitbod plans for you. Boostcamp gives you programs.
+                  Strong registra rápido. Fitbod planifica por ti. Boostcamp te da programas.
                   <span className="mt-2 block text-base">
-                    OpenTrainer keeps the useful parts: fast logging, plain progression, equipment-aware routines, and exportable data. No social feed. No black-box readiness scores. No lock-in.
+                    OpenTrainer se queda con lo útil: registro rápido, progresión clara, rutinas según tu equipamiento y datos exportables. Sin feed social. Sin métricas de recuperación confusas. Sin ataduras.
                   </span>
                 </p>
                 <div className="flex flex-col items-center gap-3 lg:items-start">
@@ -81,26 +81,26 @@ export default function Home() {
                     <SignedOut>
                       <Link href="/demo">
                         <Button size="lg" variant="outline" className="min-h-12 px-8">
-                          Live Demo
+                          Demo en vivo
                         </Button>
                       </Link>
                       <SignUpButton mode="modal">
                         <Button size="lg" className="min-h-12 px-8">
-                          Start Free
+                          Empieza Gratis
                         </Button>
                       </SignUpButton>
                     </SignedOut>
                     <SignedIn>
                       <Link href="/dashboard">
                         <Button size="lg" className="min-h-12 px-8">
-                          Go to Dashboard
+                          Ir a Inicio
                         </Button>
                       </Link>
                     </SignedIn>
                   </div>
                   <SignedOut>
                     <p className="text-xs text-muted-foreground">
-                      Claim your lifetime Pro seat before the Alpha ends.
+                      Reclama tu plaza Pro de por vida antes de que acabe la Alpha.
                     </p>
                   </SignedOut>
                 </div>
@@ -109,19 +109,19 @@ export default function Home() {
                     <svg className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    No credit card required
+                    No requiere tarjeta
                   </span>
                   <span className="flex items-center gap-1.5">
                     <svg className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    No app install
+                    Sin instalar app
                   </span>
                   <span className="flex items-center gap-1.5">
                     <svg className="h-4 w-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                     </svg>
-                    Export anytime
+                    Exporta cuando quieras
                   </span>
                 </div>
               </div>
