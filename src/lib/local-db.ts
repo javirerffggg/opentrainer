@@ -691,6 +691,105 @@ export const localDb = {
     return args.workoutId;
   },
 
+  "workouts:getDashboardStats": () => {
+    const user = getOrCreateCurrentUser();
+    const workouts = getLocalItem<Workout[]>(STORAGE_KEYS.WORKOUTS, []);
+    const completed = workouts.filter((w) => w.status === "completed");
+
+    // Calculate start of current week (Monday)
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const daysSinceMonday = (dayOfWeek + 6) % 7;
+    const mondayOfThisWeek = new Date(now);
+    mondayOfThisWeek.setDate(now.getDate() - daysSinceMonday);
+    mondayOfThisWeek.setHours(0, 0, 0, 0);
+
+    // Get current week (Monday through Sunday) for activity dots
+    const currentWeek: { date: string; dayName: string; hasWorkout: boolean }[] = [];
+    for (let i = 0; i < 7; i++) {
+      const date = new Date(mondayOfThisWeek);
+      date.setDate(mondayOfThisWeek.getDate() + i);
+      currentWeek.push({
+        date: date.toISOString().split("T")[0],
+        dayName: date.toLocaleDateString("en-US", { weekday: "short" }),
+        hasWorkout: false,
+      });
+    }
+
+    // Get workouts from the current week
+    const thisWeekWorkouts = completed.filter(
+      (w) => w.startedAt >= mondayOfThisWeek.getTime()
+    );
+
+    // Mark days with workouts
+    for (const workout of thisWeekWorkouts) {
+      const workoutDate = new Date(workout.startedAt).toISOString().split("T")[0];
+      const dayEntry = currentWeek.find((d) => d.date === workoutDate);
+      if (dayEntry) {
+        dayEntry.hasWorkout = true;
+      }
+    }
+
+    const weeklyWorkoutCount = thisWeekWorkouts.length;
+    let weeklyTotalSets = 0;
+    let weeklyTotalVolume = 0;
+    let weeklyTotalDuration = 0;
+
+    for (const workout of thisWeekWorkouts) {
+      weeklyTotalSets += workout.summary?.totalSets ?? 0;
+      weeklyTotalVolume += workout.summary?.totalVolume ?? 0;
+      weeklyTotalDuration += workout.summary?.totalDurationMinutes ?? 0;
+    }
+
+    // Group by week for trend chart (last 4 weeks)
+    const weeklyTrend: { week: string; volume: number; workouts: number; duration: number }[] = [];
+    for (let i = 3; i >= 0; i--) {
+      const weekStart = new Date(now);
+      weekStart.setDate(now.getDate() - (i * 7 + daysSinceMonday));
+      weekStart.setHours(0, 0, 0, 0);
+
+      const weekEnd = new Date(weekStart);
+      weekEnd.setDate(weekStart.getDate() + 7);
+
+      const weekWorkouts = completed.filter(
+        (w) => w.startedAt >= weekStart.getTime() && w.startedAt < weekEnd.getTime()
+      );
+
+      let volume = 0;
+      let duration = 0;
+      for (const w of weekWorkouts) {
+        volume += w.summary?.totalVolume ?? 0;
+        duration += w.summary?.totalDurationMinutes ?? 0;
+      }
+
+      weeklyTrend.push({
+        week: weekStart.toLocaleDateString("en-US", { month: "short", day: "numeric" }),
+        volume,
+        workouts: weekWorkouts.length,
+        duration,
+      });
+    }
+
+    return {
+      weeklyGoal: user.weeklyAvailability ?? 4,
+      weeklyWorkoutCount,
+      weeklyTotalSets,
+      weeklyTotalVolume,
+      weeklyTotalDuration,
+      currentWeek,
+      weeklyTrend,
+      preferredUnits: user.preferredUnits ?? "lb",
+    };
+  },
+
+  "workouts:updateWeeklyGoal": (args: { weeklyGoal: number }) => {
+    const user = getOrCreateCurrentUser();
+    const updated = { ...user, weeklyAvailability: args.weeklyGoal };
+    setLocalItem(STORAGE_KEYS.USER, updated);
+    notify();
+    return user._id;
+  },
+
   "workouts:exportWorkoutAsJson": (args: { workoutId: Id<"workouts"> }) => {
     const workouts = getLocalItem<Workout[]>(STORAGE_KEYS.WORKOUTS, []);
     const workout = workouts.find((w) => w._id === args.workoutId);

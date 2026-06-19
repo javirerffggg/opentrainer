@@ -11,7 +11,23 @@ import {
 function getFunctionName(funcRef: any): string {
   if (!funcRef) return "";
   if (typeof funcRef === "string") return funcRef;
-  return funcRef._path || funcRef.path || funcRef.toString() || "";
+  
+  try {
+    const symbolForName = Symbol.for("functionName");
+    const name = funcRef[symbolForName];
+    if (typeof name === "string") {
+      return name;
+    }
+  } catch (e) {}
+
+  if (typeof funcRef === "object" || typeof funcRef === "function") {
+    try {
+      if (typeof funcRef._path === "string") return funcRef._path;
+      if (typeof funcRef.path === "string") return funcRef.path;
+    } catch (e) {}
+  }
+
+  return "";
 }
 
 // mock client instance
